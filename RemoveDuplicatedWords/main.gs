@@ -10,10 +10,12 @@ function main() {
     var startRow = range.getRow();
 
     var validDuplicatedRowNumber = [];
+    var validDuplicatedWordTranslationMap = new Map();
     var validDuplicatedWordTranslationLength = [];
     var duplicatedWords = [];
     var visitedWords = [];
     var visitedWordRowNumber = [];
+    var visitedWordTranslation = [];
     var visitedWordTranslationLength = [];
     for (var i=0; i < values.length; i++) {
       var row = startRow + i;
@@ -29,15 +31,18 @@ function main() {
         if (result != -1 && translationLength > validDuplicatedWordTranslationLength[result]) {
           validDuplicatedRowNumber[result] = row;
           validDuplicatedWordTranslationLength[result] = translationLength;
+          validDuplicatedWordTranslationMap.set(word, translation);
         }
         else if (result == -1) {
           duplicatedWords.push(word);
           validDuplicatedRowNumber.push(visitedWordTranslationLength[visitedResult] > translationLength ? visitedWordRowNumber[visitedResult] : row);
           validDuplicatedWordTranslationLength.push(visitedWordTranslationLength[visitedResult] > translationLength ? visitedWordTranslationLength[visitedResult] : translationLength);
+          validDuplicatedWordTranslationMap.set(word, visitedWordTranslationLength[visitedResult] > translationLength ? visitedWordTranslation[visitedResult] : translation)
         }
       }
       visitedWords.push(word);
       visitedWordRowNumber.push(row);
+      visitedWordTranslation.push(translation);
       visitedWordTranslationLength.push(translationLength);
     }
 
@@ -68,11 +73,12 @@ function main() {
       var duplicatedWordsStatsSheetValues = duplicatedWordsStatsSheetRange.getValues();
       var duplicatedWordsStatsSheetStartRow = duplicatedWordsStatsSheetRange.getRow();
       var duplicatedWordsMap = new Map();
+      var addedNewDuplicatedRecordsCounter = 0;
 
       for (var i=0; i < duplicatedWords.length; i++) {
         var word = duplicatedWords[i];
         var bFound = false;
-        var cellRow = duplicatedWordsStatsSheetValues.length + duplicatedWordsStatsSheetStartRow;
+        var cellRow = duplicatedWordsStatsSheetValues.length + duplicatedWordsStatsSheetStartRow + addedNewDuplicatedRecordsCounter;
         for (var j=0; j < duplicatedWordsStatsSheetValues.length; j++) {
           if (duplicatedWordsStatsSheetValues[j][1] == word)
           {
@@ -83,8 +89,11 @@ function main() {
         }
         if (!bFound) {
           duplicatedWordsStatsSheet.getRange(cellRow, 2).setValue(word);
+          addedNewDuplicatedRecordsCounter += 1;
         }
         var chinese = duplicatedWordsStatsSheet.getRange(cellRow, 4).getValue();
+        duplicatedWordsStatsSheet.getRange(cellRow, 4).setValue(validDuplicatedWordTranslationMap.get(word));
+        Utilities.sleep(200);
         var counter_ = duplicatedWordsStatsSheet.getRange(cellRow, 6).getValue();
         var counter = 1;
         if (typeof counter == "number") {
@@ -109,7 +118,7 @@ function main() {
       }
 
       MailApp.sendEmail({
-        to: "example@exmaple.com",
+        to: "example@example.com",
         subject: `We have found ${duplicatedWordsMap.size} duplicated word${duplicatedWordsMap.size > 1 ? "s" : ""}`,
         body: emailBody
       });
