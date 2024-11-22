@@ -12,8 +12,8 @@ function fill() {
     var validDict = new Map();
     for (var i=0; i < values.length; i++) {
       var row = startRow + i;
-      var word = values[i][1];
-      var translation = values[i][3];
+      var word = values[i][1].toString().trim();
+      var translation = values[i][3].toString().trim();
       var translationLength = translation.toString().length;
       if (word == "") {
         continue;
@@ -38,7 +38,7 @@ function fill() {
 
     for (var i=0; i < duplicatedWordsStatsSheetValues.length; i++) {
       var row = duplicatedWordsStatsSheetStartRow + i;
-      var word = duplicatedWordsStatsSheetValues[i][1];
+      var word = duplicatedWordsStatsSheetValues[i][1].toString().trim();
       if (word == "")
       {
         continue;

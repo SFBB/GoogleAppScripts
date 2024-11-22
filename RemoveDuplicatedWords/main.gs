@@ -19,8 +19,8 @@ function main() {
     var visitedWordTranslationLength = [];
     for (var i=0; i < values.length; i++) {
       var row = startRow + i;
-      var word = values[i][1];
-      var translation = values[i][3];
+      var word = values[i][1].toString().trim();
+      var translation = values[i][3].toString().trim();
       var translationLength = translation.toString().length;
       if (word == "") {
         continue;
@@ -49,7 +49,7 @@ function main() {
     var duplicatedRows = [];
     for (var i=0; i < values.length; i++) {
       var row = startRow + i;
-      var word = values[i][1];
+      var word = values[i][1].toString().trim();
       if (duplicatedWords.indexOf(word) != -1 && validDuplicatedRowNumber.indexOf(row) == -1) {
         duplicatedRows.push(row);
       }
@@ -60,7 +60,7 @@ function main() {
     for (var i=0; i < duplicatedRows.length; i++) {
       sheet.deleteRow(duplicatedRows[i] - removedDuplicatedRowCounter);
       removedDuplicatedRowCounter += 1;
-      Logger.log("Removed %s, row: %d, we have removed %d word%s!", values[duplicatedRows[i] - startRow][1].toString(), duplicatedRows[i], removedDuplicatedRowCounter, removedDuplicatedRowCounter > 1 ? "s" : "");
+      Logger.log("Removed %s, row: %d, we have removed %d word%s!", values[duplicatedRows[i] - startRow][1].toString().trim(), duplicatedRows[i], removedDuplicatedRowCounter, removedDuplicatedRowCounter > 1 ? "s" : "");
       Utilities.sleep(200);
     }
     Logger.log(removedDuplicatedRowCounter);
@@ -80,7 +80,7 @@ function main() {
         var bFound = false;
         var cellRow = duplicatedWordsStatsSheetValues.length + duplicatedWordsStatsSheetStartRow + addedNewDuplicatedRecordsCounter;
         for (var j=0; j < duplicatedWordsStatsSheetValues.length; j++) {
-          if (duplicatedWordsStatsSheetValues[j][1] == word)
+          if (duplicatedWordsStatsSheetValues[j][1].toString().trim() == word)
           {
             cellRow = j + duplicatedWordsStatsSheetStartRow;
             bFound = true;
@@ -91,7 +91,7 @@ function main() {
           duplicatedWordsStatsSheet.getRange(cellRow, 2).setValue(word);
           addedNewDuplicatedRecordsCounter += 1;
         }
-        var chinese = duplicatedWordsStatsSheet.getRange(cellRow, 4).getValue();
+        var chinese = duplicatedWordsStatsSheet.getRange(cellRow, 4).getValue().toString().trim();
         if (validDuplicatedWordTranslationMap.get(word).toString().length > 0) {
           duplicatedWordsStatsSheet.getRange(cellRow, 4).setValue(validDuplicatedWordTranslationMap.get(word));
           chinese = validDuplicatedWordTranslationMap.get(word);
