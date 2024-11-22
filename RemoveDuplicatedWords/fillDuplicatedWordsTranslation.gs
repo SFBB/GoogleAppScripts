@@ -43,7 +43,7 @@ function fill() {
       {
         continue;
       }
-      if (validDict.has(word)) {
+      if (validDict.has(word) && validDict.get(word).toString().length > 0) {
         duplicatedWordsStatsSheet.getRange(row, 4).setValue(validDict.get(word));
         Utilities.sleep(200);
       }

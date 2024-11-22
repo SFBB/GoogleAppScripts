@@ -92,7 +92,10 @@ function main() {
           addedNewDuplicatedRecordsCounter += 1;
         }
         var chinese = duplicatedWordsStatsSheet.getRange(cellRow, 4).getValue();
-        duplicatedWordsStatsSheet.getRange(cellRow, 4).setValue(validDuplicatedWordTranslationMap.get(word));
+        if (validDuplicatedWordTranslationMap.get(word).toString().length > 0) {
+          duplicatedWordsStatsSheet.getRange(cellRow, 4).setValue(validDuplicatedWordTranslationMap.get(word));
+          chinese = validDuplicatedWordTranslationMap.get(word);
+        }
         Utilities.sleep(200);
         var counter_ = duplicatedWordsStatsSheet.getRange(cellRow, 6).getValue();
         var counter = 1;
