@@ -1,4 +1,4 @@
-function main() {
+function main_phrases() {
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(12000);
