@@ -46,14 +46,22 @@ function main() {
       visitedWordTranslationLength.push(translationLength);
     }
 
+    duplicatedWords = duplicatedWords.slice(0, 100);
     var duplicatedRows = [];
+    var sureToDeleteWords = new Set();
     for (var i=0; i < values.length; i++) {
       var row = startRow + i;
       var word = values[i][1].toString().trim();
       if (duplicatedWords.indexOf(word) != -1 && validDuplicatedRowNumber.indexOf(row) == -1) {
         duplicatedRows.push(row);
+        sureToDeleteWords.add(word);
+        if (duplicatedRows.length >= 100)
+        {
+          break;
+        }
       }
     }
+    duplicatedWords = Array.from(sureToDeleteWords);
 
     Logger.log(duplicatedRows.length);
     var removedDuplicatedRowCounter = 0;
