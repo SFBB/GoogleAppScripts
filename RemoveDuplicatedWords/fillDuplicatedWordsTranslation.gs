@@ -35,8 +35,9 @@ function fill() {
     var duplicatedWordsStatsSheetRange = duplicatedWordsStatsSheet.getDataRange();
     var duplicatedWordsStatsSheetValues = duplicatedWordsStatsSheetRange.getValues();
     var duplicatedWordsStatsSheetStartRow = duplicatedWordsStatsSheetRange.getRow();
+    const startFillIndex = Math.max(0, duplicatedWordsStatsSheetValues.length - 300);
 
-    for (var i=0; i < duplicatedWordsStatsSheetValues.length; i++) {
+    for (var i=startFillIndex; i < duplicatedWordsStatsSheetValues.length; i++) {
       var row = duplicatedWordsStatsSheetStartRow + i;
       var word = duplicatedWordsStatsSheetValues[i][1].toString().trim();
       if (word == "")
